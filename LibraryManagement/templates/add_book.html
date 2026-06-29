@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Thêm Sách Mới - Library Pro{% endblock %}
+
+{% block content %}
+<div class="page-header mb-4">
+  <h2 class="mb-0">
+    <i class="fa-solid fa-circle-plus text-warning me-2"></i>
+    Thêm Sách Mới
+  </h2>
+  <p class="text-muted small mb-0">Nhập thông tin chi tiết cho đầu sách mới</p>
+</div>
+
+<div class="form-container">
+  <form method="POST">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-3">
+          <div class="card-body">
+            <h5 class="card-title mb-3">
+              <i class="fa-solid fa-info-circle me-2"></i>Thông tin cơ bản
+            </h5>
+            
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Tên / Tựa đề Sách <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="title" required placeholder="Nhập tên sách">
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Tác giả <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="author" required placeholder="Tên tác giả">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Thể loại <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="category" required placeholder="Văn học, Khoa học...">
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Nhà Xuất Bản</label>
+                <input type="text" class="form-control" name="publisher" placeholder="NXB...">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Năm phát hành</label>
+                <input type="number" class="form-control" name="publish_year" placeholder="2024" min="1900" max="2099">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title mb-3">
+              <i class="fa-solid fa-boxes-stacked me-2"></i>Số lượng
+            </h5>
+            
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Tổng số lượng trong kho <span class="text-danger">*</span></label>
+              <input type="number" class="form-control" name="quantity" min="1" required placeholder="Nhập số lượng">
+              <small class="form-text text-muted">Số lượng sách ban đầu nhập vào kho</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm bg-light">
+          <div class="card-body">
+            <h5 class="card-title">
+              <i class="fa-solid fa-lightbulb text-warning me-2"></i>Hướng dẫn
+            </h5>
+            <ul class="small text-muted mb-0">
+              <li>Điền đầy đủ thông tin bắt buộc (*)</li>
+              <li>Thể loại: Văn học, Khoa học, Kỹ năng...</li>
+              <li>Số lượng phải là số dương</li>
+              <li>Hệ thống tự động tạo mã sách</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-4 d-flex gap-2">
+      <button type="submit" class="btn btn-primary px-4">
+        <i class="fa-solid fa-save me-2"></i>Lưu sách
+      </button>
+      <a href="{{ url_for('books_list') }}" class="btn btn-outline-secondary px-4">
+        <i class="fa-solid fa-arrow-left me-2"></i>Quay lại
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock %}

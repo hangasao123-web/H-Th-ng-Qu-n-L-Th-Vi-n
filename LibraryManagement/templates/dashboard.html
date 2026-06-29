@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Bảng điều khiển</h2>
+<div class="cards">
+  <div class="card"><h3>Sách</h3><p>{{ books|length }}</p></div>
+  <div class="card"><h3>Thành viên</h3><p>{{ members|length }}</p></div>
+  <div class="card"><h3>Phiếu mượn</h3><p>{{ borrows|length }}</p></div>
+</div>
+{% endblock %}

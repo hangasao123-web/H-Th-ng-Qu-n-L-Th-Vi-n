@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Quản lý Độc giả - Library Pro{% endblock %}
+
+{% block content %}
+<div class="page-header mb-4">
+  <h2 class="mb-0">
+    <i class="fa-solid fa-users text-primary me-2"></i>
+    Quản lý Độc giả
+  </h2>
+  <p class="text-muted small mb-0">Quản lý thông tin thành viên thư viện</p>
+</div>
+
+<div class="row">
+  <!-- Add Member Form -->
+  <div class="col-lg-4 mb-4">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-primary text-white fw-bold">
+        <i class="fa-solid fa-user-plus me-2"></i>Đăng ký độc giả mới
+      </div>
+      <div class="card-body">
+        <form method="POST">
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Họ tên độc giả <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="name" required placeholder="Nhập tên đầy đủ">
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Địa chỉ Email</label>
+            <input type="email" class="form-control" name="email" placeholder="name@domain.com">
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Số điện thoại</label>
+            <input type="tel" class="form-control" name="phone" placeholder="Số liên lạc">
+          </div>
+          
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Địa chỉ liên hệ</label>
+            <textarea class="form-control" name="address" rows="2" placeholder="Nơi ở hoặc địa chỉ"></textarea>
+          </div>
+          
+          <button type="submit" class="btn btn-success w-100 fw-bold">
+            <i class="fa-solid fa-save me-2"></i>Lưu thông tin
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Members List -->
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white">
+        <h5 class="mb-0">
+          <i class="fa-solid fa-list me-2"></i>Danh sách thành viên
+        </h5>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-hover table-striped align-middle mb-0">
+          <thead class="table-dark">
+            <tr>
+              <th>Mã Thẻ</th>
+              <th>Họ và Tên</th>
+              <th>Email</th>
+              <th>Điện thoại</th>
+              <th>Địa Chỉ</th>
+              <th class="text-center">Hành động</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for member in members %}
+            <tr>
+              <td><strong>#{{ member.id }}</strong></td>
+              <td class="fw-semibold">{{ member.name }}</td>
+              <td>{{ member.email or '---' }}</td>
+              <td>{{ member.phone or '---' }}</td>
+              <td><small class="text-muted">{{ member.address or '---' }}</small></td>
+              <td class="text-center">
+                <a href="{{ url_for('delete_member', member_id=member.id) }}" 
+                   class="btn btn-outline-danger btn-sm"
+                   onclick="return confirm('Bạn có chắc chắn muốn xóa thành viên này?')">
+                  <i class="fa-solid fa-user-xmark"></i> Xóa
+                </a>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="6" class="text-center py-5">
+                <i class="fa-solid fa-user-slash text-muted fa-2x mb-3 d-block"></i>
+                <p class="text-muted">Chưa có độc giả nào. Hãy thêm ở form bên cạnh.</p>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      
+      {% if members %}
+      <div class="card-footer bg-white">
+        <small class="text-muted">
+          Tổng cộng: <strong>{{ members|length }}</strong> độc giả
+        </small>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+
+{% block title %}Thống kê - Library Pro{% endblock %}
+
+{% block extra_css %}
+<style>
+  .bg-gradient-books { background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important; }
+  .bg-gradient-readers { background: linear-gradient(135deg, #10b981, #047857) !important; }
+  .bg-gradient-tickets { background: linear-gradient(135deg, #f59e0b, #b45309) !important; }
+  .bg-gradient-borrowing { background: linear-gradient(135deg, #06b6d4, #0369a1) !important; }
+  .bg-gradient-late { background: linear-gradient(135deg, #ef4444, #b91c1c) !important; }
+  .bg-gradient-fine { background: linear-gradient(135deg, #64748b, #334155) !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header mb-4">
+  <h2 class="mb-0">
+    <i class="fa-solid fa-chart-pie text-primary me-2"></i>
+    Thống kê & Báo cáo
+  </h2>
+  <p class="text-muted small mb-0">Phân tích dữ liệu hoạt động thư viện</p>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-4 mb-3">
+    <div class="card stat-card bg-gradient-books border-0 shadow-sm">
+      <div class="card-body">
+        <h5 class="text-white-50 small text-uppercase mb-2">Tổng số sách</h5>
+        <h2 class="text-white mb-0">{{ total_books }}</h2>
+        <small class="text-white-50">Đầu sách trong hệ thống</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-4 mb-3">
+    <div class="card stat-card bg-gradient-readers border-0 shadow-sm">
+      <div class="card-body">
+        <h5 class="text-white-50 small text-uppercase mb-2">Độc giả</h5>
+        <h2 class="text-white mb-0">{{ total_members }}</h2>
+        <small class="text-white-50">Thành viên đăng ký</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-4 mb-3">
+    <div class="card stat-card bg-gradient-tickets border-0 shadow-sm">
+      <div class="card-body">
+        <h5 class="text-white-50 small text-uppercase mb-2">Phiếu mượn</h5>
+        <h2 class="text-white mb-0">{{ total_borrows }}</h2>
+        <small class="text-white-50">Tổng số phiếu đã lập</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-4 mb-3">
+    <div class="card stat-card bg-gradient-borrowing border-0 shadow-sm">
+      <div class="card-body">
+        <h5 class="text-white-50 small text-uppercase mb-2">Đang mượn</h5>
+        <h2 class="text-white mb-0">{{ active_borrows }}</h2>
+        <small class="text-white-50">Sách đang lưu hành</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-4 mb-3">
+    <div class="card stat-card bg-gradient-late border-0 shadow-sm">
+      <div class="card-body">
+        <h5 class="text-white-50 small text-uppercase mb-2">Quá hạn</h5>
+        <h2 class="text-white mb-0">{{ overdue_borrows }}</h2>
+        <small class="text-white-50">Cần xử lý ngay</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-xl-4 mb-3">
+    <div class="card stat-card bg-gradient-fine border-0 shadow-sm">
+      <div class="card-body">
+        <h5 class="text-white-50 small text-uppercase mb-2">Tiền phạt</h5>
+        <h2 class="text-white mb-0">{{ "{:,.0f}".format(total_fine) }} đ</h2>
+        <small class="text-white-50">Tổng thu phạt</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts Row -->
+<div class="row g-3 mb-4">
+  <!-- Category Chart -->
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white border-0">
+        <h5 class="mb-0">
+          <i class="fa-solid fa-tags text-primary me-2"></i>
+          Thống kê theo Thể loại
+        </h5>
+      </div>
+      <div class="card-body">
+        {% if categories %}
+        <canvas id="categoryChart"></canvas>
+        {% else %}
+        <div class="text-center py-5 text-muted">
+          <i class="fa-solid fa-chart-pie fa-3x mb-3 d-block"></i>
+          <p>Chưa có dữ liệu thể loại</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Monthly Chart -->
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white border-0">
+        <h5 class="mb-0">
+          <i class="fa-solid fa-calendar-days text-primary me-2"></i>
+          Mượn sách 6 tháng gần nhất
+        </h5>
+      </div>
+      <div class="card-body">
+        {% if monthly_stats %}
+        <canvas id="monthlyChart"></canvas>
+        {% else %}
+        <div class="text-center py-5 text-muted">
+          <i class="fa-solid fa-chart-column fa-3x mb-3 d-block"></i>
+          <p>Chưa có dữ liệu mượn sách</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category Table -->
+{% if categories %}
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white border-0">
+    <h5 class="mb-0">
+      <i class="fa-solid fa-list-ul text-primary me-2"></i>
+      Chi tiết theo Thể loại
+    </h5>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>Thể loại</th>
+          <th>Số đầu sách</th>
+          <th>Tổng số lượng</th>
+          <th>Tỷ lệ</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for cat in categories %}
+        <tr>
+          <td class="fw-semibold">{{ cat.category }}</td>
+          <td>{{ cat.count }}</td>
+          <td>{{ cat.total_qty }}</td>
+          <td>
+            <div class="progress" style="height: 20px;">
+              <div class="progress-bar" role="progressbar" 
+                   style="width: {{ (cat.count / categories|length * 100) }}%">
+                {{ "%.1f" % (cat.count / categories|length * 100) }}%
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if categories %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Category Chart
+  const catCtx = document.getElementById('categoryChart');
+  if (catCtx) {
+    const catLabels = [];
+    const catData = [];
+    {% for cat in categories %}
+    catLabels.push('{{ cat.category }}');
+    catData.push({{ cat.count }});
+    {% endfor %}
+    
+    new Chart(catCtx, {
+      type: 'doughnut',
+      data: {
+        labels: catLabels,
+        datasets: [{
+          data: catData,
+          backgroundColor: [
+            '#3b82f6', '#10b981', '#f59e0b', '#ef4444', 
+            '#8b5cf6', '#ec4899', '#06b6d4', '#84cc16'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+  }
+});
+</script>
+{% endif %}
+
+{% if monthly_stats %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Monthly Chart
+  const monCtx = document.getElementById('monthlyChart');
+  if (monCtx) {
+    const monLabels = [];
+    const monData = [];
+    {% for stat in monthly_stats %}
+    monLabels.push('{{ stat.month }}');
+    monData.push({{ stat.count }});
+    {% endfor %}
+    
+    new Chart(monCtx, {
+      type: 'bar',
+      data: {
+        labels: monLabels,
+        datasets: [{
+          label: 'Số phiếu mượn',
+          data: monData,
+          backgroundColor: '#3b82f6',
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  }
+});
+</script>
+{% endif %}
+{% endblock %}

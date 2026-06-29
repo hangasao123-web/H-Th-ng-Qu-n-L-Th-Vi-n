@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Đăng ký - Library Pro{% endblock %}
+
+{% block content %}
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-icon">
+        <i class="fa-solid fa-user-plus"></i>
+      </div>
+      <h2 class="login-title">ĐĂNG KÝ TÀI KHOẢN</h2>
+      <p class="login-subtitle">Tạo tài khoản thủ thư mới</p>
+    </div>
+    
+    <form method="POST" class="login-form">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Họ và tên" required>
+        <label for="fullname">
+          <i class="fa-solid fa-id-card me-2"></i>Họ và tên
+        </label>
+      </div>
+      
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="username" name="username" placeholder="Tên đăng nhập" required>
+        <label for="username">
+          <i class="fa-solid fa-user me-2"></i>Tên đăng nhập
+        </label>
+      </div>
+      
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+        <label for="email">
+          <i class="fa-solid fa-envelope me-2"></i>Email
+        </label>
+      </div>
+      
+      <div class="form-floating mb-4">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu" required minlength="6">
+        <label for="password">
+          <i class="fa-solid fa-lock me-2"></i>Mật khẩu (tối thiểu 6 ký tự)
+        </label>
+      </div>
+      
+      <button type="submit" class="btn btn-login w-100 py-2 fw-bold text-uppercase">
+        <i class="fa-solid fa-user-check me-2"></i>Đăng ký
+      </button>
+    </form>
+    
+    <div class="login-footer">
+      <hr class="my-4">
+      <div class="small text-muted">
+        Đã có tài khoản? 
+        <a href="{{ url_for('login') }}" class="text-decoration-none fw-bold">Đăng nhập ngay</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Đăng nhập - Library Pro{% endblock %}
+
+{% block content %}
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="login-icon">
+        <i class="fa-solid fa-circle-user"></i>
+      </div>
+      <h2 class="login-title">ĐĂNG NHẬP</h2>
+      <p class="login-subtitle">Hệ thống Quản lý Thư viện điện tử</p>
+    </div>
+    
+    <form method="POST" class="login-form">
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="username" name="username" placeholder="Tên đăng nhập" required>
+        <label for="username">
+          <i class="fa-solid fa-user me-2"></i>Tên đăng nhập
+        </label>
+      </div>
+      
+      <div class="form-floating mb-4">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu" required>
+        <label for="password">
+          <i class="fa-solid fa-lock me-2"></i>Mật khẩu
+        </label>
+      </div>
+      
+      <button type="submit" class="btn btn-login w-100 py-2 fw-bold text-uppercase">
+        <i class="fa-solid fa-right-to-bracket me-2"></i>Vào hệ thống
+      </button>
+    </form>
+    
+    <div class="login-footer">
+      <hr class="my-4">
+      <div class="small text-muted">
+        Bạn chưa có tài khoản? 
+        <a href="{{ url_for('register') }}" class="text-decoration-none fw-bold">Đăng ký ngay</a>
+      </div>
+      <div class="small text-muted mt-2">
+        <strong>Tài khoản mặc định:</strong> admin / 123456
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

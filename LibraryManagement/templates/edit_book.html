@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Chỉnh sửa Sách - Library Pro{% endblock %}
+
+{% block content %}
+<div class="page-header mb-4">
+  <h2 class="mb-0">
+    <i class="fa-solid fa-pen-to-square text-warning me-2"></i>
+    Chỉnh sửa Thông tin Sách
+  </h2>
+  <p class="text-muted small mb-0">Cập nhật thông tin chi tiết cho mã sách: <strong>#{{ book.id }}</strong></p>
+</div>
+
+<div class="form-container">
+  <form method="POST">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-3">
+          <div class="card-body">
+            <h5 class="card-title mb-3">
+              <i class="fa-solid fa-info-circle me-2"></i>Thông tin cơ bản
+            </h5>
+            
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Tên / Tựa đề Sách <span class="text-danger">*</span></label>
+              <input type="text" class="form-control" name="title" value="{{ book.title }}" required>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Tác giả <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="author" value="{{ book.author }}" required>
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Thể loại <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="category" value="{{ book.category }}" required>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Nhà Xuất Bản</label>
+                <input type="text" class="form-control" name="publisher" value="{{ book.publisher or '' }}">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Năm phát hành</label>
+                <input type="number" class="form-control" name="publish_year" value="{{ book.publish_year or '' }}" min="1900" max="2099">
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="card border-0 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title mb-3">
+              <i class="fa-solid fa-boxes-stacked me-2"></i>Số lượng
+            </h5>
+            
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Tổng số lượng trong kho <span class="text-danger">*</span></label>
+              <input type="number" class="form-control" name="quantity" min="1" value="{{ book.quantity }}" required>
+              <small class="form-text text-muted">Số lượng sách hiện có trong kho</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-4">
+        <div class="card border-0 shadow-sm bg-light">
+          <div class="card-body">
+            <h5 class="card-title">
+              <i class="fa-solid fa-circle-info text-info me-2"></i>Thông tin hiện tại
+            </h5>
+            <ul class="small text-muted mb-0">
+              <li><strong>Mã sách:</strong> #{{ book.id }}</li>
+              <li><strong>Sẵn có:</strong> {{ book.available }} quyển</li>
+              <li><strong>Đang mượn:</strong> {{ book.quantity - book.available }} quyển</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-4 d-flex gap-2">
+      <button type="submit" class="btn btn-warning px-4">
+        <i class="fa-solid fa-save me-2"></i>Cập nhật
+      </button>
+      <a href="{{ url_for('books_list') }}" class="btn btn-outline-secondary px-4">
+        <i class="fa-solid fa-arrow-left me-2"></i>Quay lại
+      </a>
+    </div>
+  </form>
+</div>
+{% endblock %}

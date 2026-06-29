@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Bảng điều khiển - Library Pro{% endblock %}
+
+{% block content %}
+<div class="page-header d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2 class="mb-0">
+      <i class="fa-solid fa-gauge-high text-primary me-2"></i>
+      Bảng điều khiển Thống kê
+    </h2>
+    <p class="text-muted small mb-0">Tổng quan hệ thống quản lý thư viện</p>
+  </div>
+  <span class="badge bg-secondary p-2">
+    <i class="fa-regular fa-clock me-1"></i>Hôm nay: {{ datetime }}
+  </span>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="stat-card card-stats shadow-sm h-100 p-3 border-start border-4 border-primary">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <h6 class="text-muted text-uppercase small mb-1">Tổng sách</h6>
+          <h3 class="fw-bold text-dark mb-0">{{ total_books }}</h3>
+          <small class="text-muted">{{ total_titles }} đầu sách</small>
+        </div>
+        <div class="bg-primary bg-opacity-10 p-3 rounded-circle text-primary">
+          <i class="fa-solid fa-book fa-2x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-6 col-lg-3">
+    <div class="stat-card card-stats shadow-sm h-100 p-3 border-start border-4 border-success">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <h6 class="text-muted text-uppercase small mb-1">Độc giả</h6>
+          <h3 class="fw-bold text-dark mb-0">{{ total_members }}</h3>
+          <small class="text-muted">Thành viên</small>
+        </div>
+        <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success">
+          <i class="fa-solid fa-users fa-2x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-6 col-lg-3">
+    <div class="stat-card card-stats shadow-sm h-100 p-3 border-start border-4 border-warning">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <h6 class="text-muted text-uppercase small mb-1">Đang mượn</h6>
+          <h3 class="fw-bold text-dark mb-0">{{ active_borrows }}</h3>
+          <small class="text-muted">Phiếu mượn</small>
+        </div>
+        <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning">
+          <i class="fa-solid fa-clipboard-list fa-2x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-6 col-lg-3">
+    <div class="stat-card card-stats shadow-sm h-100 p-3 border-start border-4 border-danger">
+      <div class="d-flex align-items-center justify-content-between">
+        <div>
+          <h6 class="text-muted text-uppercase small mb-1">Quá hạn</h6>
+          <h3 class="fw-bold text-danger mb-0">{{ overdue_borrows }}</h3>
+          <small class="text-danger">Cần xử lý</small>
+        </div>
+        <div class="bg-danger bg-opacity-10 p-3 rounded-circle text-danger">
+          <i class="fa-solid fa-triangle-exclamation fa-2x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Borrows -->
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white border-0">
+    <h5 class="mb-0">
+      <i class="fa-solid fa-history text-primary me-2"></i>
+      Các hoạt động mượn sách gần đây
+    </h5>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th>Mã</th>
+          <th>Tên độc giả</th>
+          <th>Tựa đề sách</th>
+          <th>Ngày mượn</th>
+          <th>Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if recent_borrows %}
+          {% for rb in recent_borrows %}
+          <tr>
+            <td><strong>#{{ rb.id }}</strong></td>
+            <td class="fw-semibold">{{ rb.member_name }}</td>
+            <td>{{ rb.book_title }}</td>
+            <td>{{ rb.borrow_date }}</td>
+            <td>
+              {% if rb.status == 'Đang mượn' %}
+                <span class="badge bg-warning text-dark">Đang mượn</span>
+              {% elif rb.status == 'Quá hạn' %}
+                <span class="badge bg-danger">Quá hạn</span>
+              {% else %}
+                <span class="badge bg-success">Đã trả</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        {% else %}
+        <tr>
+          <td colspan="5" class="text-center py-5 text-muted">
+            <i class="fa-solid fa-inbox fa-2x mb-3 d-block"></i>
+            Chưa có lịch sử giao dịch mượn trả nào.
+          </td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
